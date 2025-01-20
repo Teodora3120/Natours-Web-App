@@ -4,7 +4,8 @@
   "description": "Learn backend ",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server.js"
   },
   "author": "Vestale Teodora",
   "license": "ISC",
