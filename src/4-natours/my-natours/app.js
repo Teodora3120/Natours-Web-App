@@ -1,8 +1,9 @@
-const express = require('express');
-const app = express();
 const morgan = require('morgan');
-const tourRouter = require(`${__dirname}/routes/tourRoutes`);
-const userRouter = require(`${__dirname}/routes/userRoutes`);
+const express = require('express');
+const tourRouter = require('./routes/tourRoutes');
+const userRouter = require('./routes/userRoutes');
+
+const app = express();
 
 // MIDDLEWARES
 app.use(express.json()); // to be able to access the req.body
