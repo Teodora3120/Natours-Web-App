@@ -41,7 +41,9 @@ exports.getTour = async (req, res) => {
     if (!tour) {
       return res.status(404).json({
         status: 'fail',
-        message: 'Tour not found!',
+        message: {
+          tour: null,
+        },
       });
     }
     return res.status(200).json({
@@ -83,6 +85,7 @@ exports.updateTour = async (req, res) => {
     const updateData = req.body;
     const updatedTour = await Tour.findByIdAndUpdate(tourId, updateData, {
       new: true,
+      runValidators: true,
     });
     res.status(200).json({
       status: 'success',
