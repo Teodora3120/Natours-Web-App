@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start:dev": "nodemon server.js",
     "start:prod": "set NODE_ENV=production && nodemon server.js",
-    "prettier:watch": "prettier --write ."
+    "fmt": "prettier --write ."
   },
   "author": "Vestale Teodora",
   "license": "ISC",
