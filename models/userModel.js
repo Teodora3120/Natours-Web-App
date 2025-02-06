@@ -62,12 +62,22 @@ const userSchema = new mongoose.Schema(
     passwordResetExpires: {
       type: Date,
     },
+    active: {
+      type: Boolean,
+      default: true,
+      select: false,
+    },
   },
   {
     toJSON: { virtuals: true },
     toObject: { virtuals: true },
   },
 );
+
+userSchema.pre(/^find/, async function (next) {
+  this.find({ active: { $ne: false } });
+  next();
+});
 
 userSchema.pre('save', async function (next) {
   if (!this.isModified('password')) return next();
