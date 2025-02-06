@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
+const crypto = require('crypto');
 
 // eslint-disable-next-line import/no-extraneous-dependencies
 const bcrypt = require('bcryptjs');
@@ -21,6 +22,15 @@ const userSchema = new mongoose.Schema(
       lowercase: true,
       validate: [validator.isEmail, 'Please provide a valid email!'],
     },
+    photo: {
+      type: String,
+      //   required: [true, 'Profile photo is required!'],
+    },
+    role: {
+      type: String,
+      enum: ['user', 'guide', 'lead-guide', 'admin'],
+      default: 'user',
+    },
     password: {
       type: String,
       required: [true, 'Please provide a valid password!'],
@@ -38,10 +48,6 @@ const userSchema = new mongoose.Schema(
         message: 'Passwords are not the same! ',
       },
     },
-    photo: {
-      type: String,
-      //   required: [true, 'Profile photo is required!'],
-    },
     createdAt: {
       type: Date,
       default: Date.now(),
@@ -50,6 +56,17 @@ const userSchema = new mongoose.Schema(
     passwordChangedAt: {
       type: Date,
     },
+    passwordResetToken: {
+      type: String,
+    },
+    passwordResetExpires: {
+      type: Date,
+    },
+    active: {
+      type: Boolean,
+      default: true,
+      select: false,
+    },
   },
   {
     toJSON: { virtuals: true },
@@ -57,11 +74,22 @@ const userSchema = new mongoose.Schema(
   },
 );
 
+userSchema.pre(/^find/, async function (next) {
+  this.find({ active: { $ne: false } });
+  next();
+});
+
 userSchema.pre('save', async function (next) {
   if (!this.isModified('password')) return next();
   this.password = await bcrypt.hash(this.password, 12);
   // confirm password is a required field in order to compare with the actual password, but we do not need to store it in the db
   this.passwordConfirm = undefined;
+  next();
+});
+
+userSchema.pre('save', async function (next) {
+  if (!this.isModified('password') || this.isNew) return next();
+  this.passwordChangedAt = Date.now() - 1000;
   next();
 });
 
@@ -82,6 +110,16 @@ userSchema.methods.passwordChangedAfter = function (JWTTimestamp) {
   }
   // Not changed
   return false;
+};
+
+userSchema.methods.generateResetPasswordToken = function () {
+  const resetToken = crypto.randomBytes(32).toString('hex');
+  this.passwordResetToken = crypto
+    .createHash('sha256')
+    .update(resetToken)
+    .digest('hex');
+  this.passwordResetExpires = Date.now() + 1000 * 60 * 10;
+  return resetToken;
 };
 
 const User = mongoose.model('User', userSchema);
