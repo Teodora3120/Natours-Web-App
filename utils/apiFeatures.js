@@ -1,5 +1,3 @@
-const Tour = require('../models/tourModel');
-
 class APIFeatures {
   constructor(query, queryString) {
     this.query = query;
@@ -14,7 +12,7 @@ class APIFeatures {
     let queryStr = JSON.stringify(queryParams);
     queryStr = queryStr.replace(/\b(gte|gt|lt|lte)\b/g, (match) => `$${match}`);
 
-    this.query = Tour.find(JSON.parse(queryStr));
+    this.query = this.query.find(JSON.parse(queryStr));
     return this;
   }
 
