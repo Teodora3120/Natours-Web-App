@@ -1,3 +1,4 @@
+const path = require('path');
 /* eslint-disable import/no-extraneous-dependencies */
 const morgan = require('morgan');
 const express = require('express');
@@ -12,10 +13,15 @@ const errorHandler = require('./controllers/errorController');
 const tourRouter = require('./routes/tourRoutes');
 const userRouter = require('./routes/userRoutes');
 const reviewRouter = require('./routes/reviewRoutes');
+const viewRouter = require('./routes/viewRoutes');
 
 const app = express();
 
+app.set('view engine', 'pug');
+app.set('views', path.join(__dirname, 'views'));
+
 // GLOBAL MIDDLEWARES
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Set security http headers
 app.use(helmet());
@@ -54,14 +60,13 @@ app.use(
   }),
 );
 
-app.use(express.static(`${__dirname}/public`));
-
 // Test middleware
 app.use((req, res, next) => {
   req.requestTime = new Date().toISOString();
   next();
 });
 
+app.use('/', viewRouter);
 app.use('/api/v1/tours', tourRouter);
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/reviews', reviewRouter);
