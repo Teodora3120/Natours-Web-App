@@ -93,7 +93,6 @@ exports.getMonthlyPlan = catchAsync(async (req, res, next) => {
 exports.getToursWithin = catchAsync(async (req, res, next) => {
   const { distance, latlng, unit } = req.params;
   const [lat, lng] = latlng.split(',');
-  console.log(latlng, latlng.split(','), lat, lng);
   if (!lat || !lng) {
     return new AppError(
       'Please provide latitude and longitude in the format lat,lng.',
@@ -125,8 +124,6 @@ exports.getDistances = catchAsync(async (req, res, next) => {
   }
 
   const multiplier = unit === 'mi' ? 0.000621371 : 0.001;
-
-  console.log(multiplier, unit === 'mi');
 
   const distances = await Tour.aggregate([
     {

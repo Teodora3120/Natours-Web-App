@@ -11,7 +11,6 @@ const sendEmail = async (options) => {
       pass: process.env.EMAIL_PASSWORD,
     },
   });
-  console.log(transporter);
   // 2) define the email options
 
   const htmlmessage = `
@@ -67,7 +66,6 @@ const sendEmail = async (options) => {
     text: options.message,
     html: htmlmessage,
   };
-  console.log(mailOptions);
   // 3) send the email
   await transporter.sendMail(mailOptions);
 };

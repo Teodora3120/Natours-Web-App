@@ -40,6 +40,7 @@ const createAndSendToken = async (user, statusCode, res) => {
     },
   });
 };
+
 exports.signup = catchAsync(async (req, res, next) => {
   const newUser = await User.create({
     name: req.body.name,
@@ -59,13 +60,23 @@ exports.login = catchAsync(async (req, res, next) => {
   if (!email || !password) {
     return next(new AppError('Please provide an email and a password!', 400));
   }
-  console.log(email, password);
   const user = await User.findOne({ email }).select('+password');
   if (!user || !(await user.correctPassword(password, user.password))) {
     return next(new AppError('Incorrect email or password', 401));
   }
   createAndSendToken(user, 200, res);
 });
+
+exports.logout = (req, res) => {
+  console.log('logout');
+  res.cookie('jwt', 'loggedout', {
+    expiresIn: new Date(Date.now + 10 * 1000),
+    httpOnly: true,
+  });
+  res.status(200).json({
+    status: 'success',
+  });
+};
 
 exports.protect = catchAsync(async (req, res, next) => {
   let token;
@@ -104,8 +115,41 @@ exports.protect = catchAsync(async (req, res, next) => {
   }
   // GRANT ACCESS TO PROTECTED ROUTE
   req.user = freshUser;
+  res.locals.user = freshUser;
   next();
 });
+
+// Only for rendered pages, no errors
+exports.isLoggedIn = async (req, res, next) => {
+  if (req.cookies.jwt) {
+    try {
+      const decoded = await promisify(jwt.verify)(
+        req.cookies.jwt,
+        process.env.JWT_SECRET,
+      );
+
+      const currentUser = await User.findById(decoded.id);
+
+      if (!currentUser) {
+        return next();
+      }
+
+      const passwordChangedAfter = currentUser.passwordChangedAfter(
+        decoded.iat,
+      );
+
+      if (passwordChangedAfter) {
+        return next();
+      }
+      // There is an logged in user, and res.locals passed the user variable inside the templates
+      res.locals.user = currentUser;
+      return next();
+    } catch (error) {
+      return next();
+    }
+  }
+  next();
+};
 
 // roles is a variable array, it can be only
 // ['admin'] or it can be ['admin', 'lead-guide']
