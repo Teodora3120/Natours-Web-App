@@ -32,9 +32,11 @@ if (logOutBtn) {
 if (userDataForm) {
   userDataForm.addEventListener('submit', (e) => {
     e.preventDefault();
-    const name = document.getElementById('settings-name').value;
-    const email = document.getElementById('settings-email').value;
-    updateSettings({ name, email }, 'data');
+    const form = new FormData();
+    form.append('name', document.getElementById('settings-name').value);
+    form.append('email', document.getElementById('settings-email').value);
+    form.append('photo', document.getElementById('photo').files[0]);
+    updateSettings(form, 'data');
   });
 }
 

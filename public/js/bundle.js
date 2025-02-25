@@ -12608,39 +12608,37 @@ var login = exports.login = /*#__PURE__*/function () {
     return _regeneratorRuntime().wrap(function _callee$(_context) {
       while (1) switch (_context.prev = _context.next) {
         case 0:
-          console.log('login');
-          _context.prev = 1;
+          _context.prev = 0;
           url = 'http://127.0.0.1:3000/api/v1/users/login';
           data = {
             email: email,
             password: password
           };
-          _context.next = 6;
+          _context.next = 5;
           return (0, _axios.default)({
             method: 'POST',
             url: url,
             data: data
           });
-        case 6:
+        case 5:
           response = _context.sent;
-          console.log(response);
           if (response.data.status == 'success') {
             (0, _alerts.showAlert)('success', 'Logged in successfully!');
             window.setTimeout(function () {
               location.assign('/');
-            }, 100);
+            }, 1000);
           }
-          _context.next = 14;
+          _context.next = 12;
           break;
-        case 11:
-          _context.prev = 11;
-          _context.t0 = _context["catch"](1);
+        case 9:
+          _context.prev = 9;
+          _context.t0 = _context["catch"](0);
           (0, _alerts.showAlert)('error', _context.t0.response.data.message);
-        case 14:
+        case 12:
         case "end":
           return _context.stop();
       }
-    }, _callee, null, [[1, 11]]);
+    }, _callee, null, [[0, 9]]);
   }));
   return function login(_x, _x2) {
     return _ref.apply(this, arguments);
@@ -12943,12 +12941,11 @@ if (logOutBtn) {
 if (userDataForm) {
   userDataForm.addEventListener('submit', function (e) {
     e.preventDefault();
-    var name = document.getElementById('settings-name').value;
-    var email = document.getElementById('settings-email').value;
-    (0, _updateSettings.updateSettings)({
-      name: name,
-      email: email
-    }, 'data');
+    var form = new FormData();
+    form.append('name', document.getElementById('settings-name').value);
+    form.append('email', document.getElementById('settings-email').value);
+    form.append('photo', document.getElementById('photo').files[0]);
+    (0, _updateSettings.updateSettings)(form, 'data');
   });
 }
 if (userPasswordForm) {
@@ -13010,7 +13007,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "58368" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "58137" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];

@@ -3,7 +3,6 @@ import axios from 'axios';
 import { showAlert } from './alerts';
 
 export const login = async (email, password) => {
-  console.log('login');
   try {
     const url = 'http://127.0.0.1:3000/api/v1/users/login';
     const data = {
@@ -15,12 +14,11 @@ export const login = async (email, password) => {
       url: url,
       data: data,
     });
-    console.log(response);
     if (response.data.status == 'success') {
       showAlert('success', 'Logged in successfully!');
       window.setTimeout(() => {
         location.assign('/');
-      }, 100);
+      }, 1000);
     }
   } catch (error) {
     showAlert('error', error.response.data.message);
