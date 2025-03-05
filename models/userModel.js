@@ -24,7 +24,7 @@ const userSchema = new mongoose.Schema(
     },
     photo: {
       type: String,
-      //   required: [true, 'Profile photo is required!'],
+      default: 'default.jpg',
     },
     role: {
       type: String,
@@ -97,7 +97,10 @@ userSchema.methods.correctPassword = async function (
   candidatePassword,
   userPassword,
 ) {
-  return await bcrypt.compare(candidatePassword, userPassword);
+  const pass = await bcrypt.hash('test1234', 12);
+  console.log('New hash', pass);
+  const isMatch = await bcrypt.compare(candidatePassword, userPassword);
+  return isMatch;
 };
 
 userSchema.methods.passwordChangedAfter = function (JWTTimestamp) {

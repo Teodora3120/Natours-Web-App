@@ -432,6 +432,7 @@ body {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
+  font-size: large;
 }
 .section-description > * {
   padding: 0 8vw;
