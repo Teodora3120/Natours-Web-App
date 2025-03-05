@@ -7,9 +7,8 @@ import { showAlert } from './alerts';
 
 export const bookTour = async (tourId) => {
   try {
-    const url = `http://127.0.0.1:3000/api/v1/bookings/checkout-session/${tourId}`;
+    const url = `/api/v1/bookings/checkout-session/${tourId}`;
     const session = await axios.get(url);
-    console.log('session', session);
     await stripe.redirectToCheckout({
       sessionId: session.data.session.id,
     });

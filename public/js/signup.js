@@ -4,7 +4,7 @@ import { showAlert } from './alerts';
 
 export const signup = async (name, email, password, passwordConfirm, role) => {
   try {
-    const url = 'http://127.0.0.1:3000/api/v1/users/signup';
+    const url = '/api/v1/users/signup';
     const data = {
       name: name,
       email: email,
