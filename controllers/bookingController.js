@@ -39,12 +39,37 @@ exports.getCheckoutSession = catchAsync(async (req, res, next) => {
   });
 });
 
+// const createBookingCheckout = async (session) => {
+//   const tour = session.client_reference_id;
+//   const user = (await User.findOne({ email: session.customer_email })).id;
+//   const price = session.line_items[0].price_data.unit_amount / 100;
+//   console.log('#################', session, tour, user, price);
+//   await Booking.create({ tour, user, price });
+// };
+
 const createBookingCheckout = async (session) => {
+  console.log('Creating booking for session:', session);
+
   const tour = session.client_reference_id;
-  const user = (await User.findOne({ email: session.customer_email })).id;
-  const price = session.line_items[0].price_data.unit_amount / 100;
-  console.log('#################', session, tour, user, price);
+  const userDoc = await User.findOne({ email: session.customer_email });
+
+  if (!userDoc) {
+    console.log('User not found:', session.customer_email);
+    return;
+  }
+
+  const user = userDoc.id;
+  const price = session.amount_total / 100; // FIX: Use `amount_total` instead of `line_items`
+
+  console.log('Tour:', tour, 'User:', user, 'Price:', price);
+
+  if (!tour || !user || !price) {
+    console.log('Booking creation failed: Missing required fields.');
+    return;
+  }
+
   await Booking.create({ tour, user, price });
+  console.log('Booking successfully created!');
 };
 
 exports.webhookCheckout = catchAsync(async (req, res, next) => {
