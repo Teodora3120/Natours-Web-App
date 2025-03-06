@@ -9,9 +9,11 @@ export const bookTour = async (tourId) => {
   try {
     const url = `/api/v1/bookings/checkout-session/${tourId}`;
     const session = await axios.get(url);
+    console.log('session', session);
     await stripe.redirectToCheckout({
       sessionId: session.data.session.id,
     });
+    console.log('after redirect');
   } catch (error) {
     console.log(error);
     showAlert('error', error.response.data.message);
