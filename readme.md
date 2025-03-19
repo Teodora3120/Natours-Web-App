@@ -25,13 +25,47 @@ Natours Vest App is a server-side rendered web application designed to sell tour
 
 ## Demo
 
+### Main Tours Page
+
 ![alt text](./dev-data/demo/main-page.png)
+
+This is the homepage where users can browse available tours and see featured options.
+
+### Tour Page - Description
+
 ![alt text](./dev-data/demo/tour-1.png)
+
+Displays detailed information about a selected tour, including itinerary, highlights, and pricing.
+
+### Tour Page - Map
+
 ![alt text](./dev-data/demo/tour-2.png)
+
+Shows the tour route on a map, giving users a visual representation of the journey.
+
+### Tour Page - Reviews & Buy Section
+
 ![alt text](./dev-data/demo/tour-3.png)
+
+Includes user reviews, ratings, and a section to book the tour.
+
+### Tour Page - Stripe Payment Page
+
 ![alt text](./dev-data/demo/tour-payment.png)
+
+Secure payment processing through Stripe for booking a tour.
+
+### User Account Page
+
 ![alt text](./dev-data/demo/user-account.png)
+
+The user’s account dashboard for managing personal details and settings.
+
+### User Bookings
+
 ![alt text](./dev-data/demo/user-tours.png)
+
+Displays a list of booked tours with details.
 
 ## Installation
 
